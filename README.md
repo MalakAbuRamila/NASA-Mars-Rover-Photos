@@ -1,2 +1,4 @@
 # NASA-Mars-Rover-Photos
-A web application that allows users to view NASA's Mars rover photos. Users can select a rover, a date format (earth date or sol date) and a camera and based on their selections users can view the images in full size and the images can be saved to be viewed in a carousel.
+This web application is a Single Page Application (SPA) developed using NASA API, REST API, HTML, JavaScript, and Bootstrap.<br>
+<br>
+To get an API KEY go to this [link](https://api.nasa.gov/) and then go to Generate API Key and apply ,and you will get your own API KEY in your email.
