@@ -77,9 +77,11 @@
             <div id="dateFormatError" class="text-danger"></div>
             <div id="earthError" class="text-danger"></div>
             <div id="marsError" class="text-danger"></div>
-        </div>
+        </div><br>
+
 
         <div id="camerasField"></div>
+        <div id="cameraError" class="text-danger"></div>
 
         <br><button class="btn btn-outline-primary" type="submit" id="submitBtn">Search</button>
         <button class="btn btn-outline-primary" type="reset" id="clearBtn">Clear</button>
@@ -87,7 +89,7 @@
 
     <br><div id="SearchResults"></div>
 
-    <div id="noImage"></div>
+    <div id="noImage"></div><br>
 
     <div id="photos"></div>
 
@@ -104,6 +106,23 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="saveSuccessModal" tabindex="-1" aria-labelledby="saveSuccessModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="saveSuccessModalLabel">Photo Saved</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Photo saved successfully in the list.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
             </div>
         </div>
     </div>

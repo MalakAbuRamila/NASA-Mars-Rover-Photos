@@ -2,7 +2,7 @@
 (function() {
     document.addEventListener("DOMContentLoaded", function(){
 
-        const API_KEY = "your api key";
+        const API_KEY = "VGitofKiAyqdHxIQs8bMHbZyrollYifqFtmiCn7a";
         const API_URL = `https://api.nasa.gov/mars-photos/api/v1/rovers?api_key=${API_KEY}`;
         const infoAboutRovers = {};
         const loading = document.getElementById('loading');
@@ -10,6 +10,7 @@
         const earthError = document.getElementById('earthError');
         const marsError = document.getElementById('marsError');
         const roverError = document.getElementById('RoverError');
+        const cameraError = document.getElementById("cameraError");
         const savedPhotos = new Map();
         let carouselInterval;
 
@@ -149,7 +150,10 @@
                         landingDate: rover.landing_date,
                         maxDate: rover.max_date,
                         maxSol: rover.max_sol,
-                        Cameras: rover.cameras.map(camera => camera.name)
+                        Cameras: rover.cameras.map(camera => ({
+                            shortName: camera.name,
+                            fullName: camera.full_name
+                        }))
                     };
 
                 });
@@ -205,14 +209,28 @@
             //get the info from the info object
             const roverInfo = infoAboutRovers[roverSelect.value];
             if(roverInfo && roverInfo.Cameras){
-                let Cameras = infoAboutRovers[roverSelect.value].Cameras;
+                let Cameras = roverInfo.Cameras;
+
+                // Add a default disabled option
+                const defaultCameraOption = document.createElement('option');
+                defaultCameraOption.textContent = 'Select a camera';
+                defaultCameraOption.setAttribute('disabled', true);
+                defaultCameraOption.setAttribute('selected', true);
+                defaultCameraOption.setAttribute('value', '');
+                cameraSelect.appendChild(defaultCameraOption);
 
                 //create options with the cameras names
                 Cameras.forEach(camera => {
                     const option = document.createElement('option');
-                    option.value = String(camera);
-                    option.textContent = String(camera);
+                    option.value = camera.shortName;
+                    option.textContent = camera.fullName;
                     cameraSelect.appendChild(option);
+                });
+
+                cameraSelect.addEventListener('change', () => {
+                    if (cameraSelect.value !== '') {
+                        cameraError.innerHTML = '';
+                    }
                 });
             }
 
@@ -429,6 +447,15 @@
 
             }
 
+            // if the camera field is empty, display an error
+            if (Cameras === "") {
+                cameraError.innerHTML = "Select a camera please";
+                Valid = false;
+            }
+            else {
+                cameraError.innerHTML = "";
+            }
+
             //if everything is valid(the input fields) fetch the photos from the NASA API
             if(Valid){
                 //display a loading gif while the photos are being fetched
@@ -506,7 +533,7 @@
                     //creating card text with the information about the photo
                     const text = document.createElement('p');
                     text.classList.add('card-text');
-                    text.innerHTML = `Earth date: ${photo.earth_date}<br>Sol: ${photo.sol}<br>Camera: ${photo.camera.name}<br> 
+                    text.innerHTML = `Earth date: ${photo.earth_date}<br>Sol: ${photo.sol}<br>Camera: ${photo.camera.full_name}<br> 
                               Mission: ${photo.rover.name}`;
 
                     //create a save button that saves the photo once its clicked
@@ -524,11 +551,12 @@
                                 id: photo.id,
                                 earth_date: photo.earth_date,
                                 sol: photo.sol,
-                                camera: photo.camera.name,
+                                camera: photo.camera.full_name,
                                 img_src: photo.img_src
                             });
 
-                            alert('Photo saved successfully in the list');
+                            const successModal = new bootstrap.Modal(document.getElementById('saveSuccessModal'));
+                            successModal.show();
                         }
                         //otherwise display a message using a modal that the photo was already saved
                         else{
@@ -564,7 +592,8 @@
                 //if there are no photos create a h2 element to display the text "No images found"
                 const noImage = document.getElementById('noImage');
                 const element = document.createElement('h2');
-                element.classList.add('text-primary-emphasis');
+                element.classList.add('text-danger');
+                element.classList.add('text-center');
                 noImage.innerHTML = '';
                 element.innerHTML = 'No images found';
                 noImage.appendChild(element);
